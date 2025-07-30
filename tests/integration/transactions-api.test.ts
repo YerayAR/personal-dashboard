@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { GET, POST, PUT, DELETE } from '../../src/routes/api/transactions/+server';
 import * as dbMod from '../../src/lib/server/db';
+import { ObjectId } from 'mongodb';
 
 // Simple in-memory collection used to mock MongoDB methods
 const store: any[] = [];
@@ -9,12 +10,13 @@ const mockDb = {
   collection: () => ({
     find: () => ({ sort: () => ({ toArray: async () => store }) }),
     insertOne: async (doc: any) => {
-      const newDoc = { ...doc, _id: String(store.length + 1) };
+      const newDoc = { ...doc, _id: new ObjectId() };
       store.push(newDoc);
       return { insertedId: newDoc._id };
     },
     updateOne: async (filter: any, update: any) => {
-      const idx = store.findIndex((d) => d._id === String(filter._id));
+      const filterIdStr = filter._id instanceof ObjectId ? filter._id.toString() : String(filter._id);
+      const idx = store.findIndex((d) => d._id.toString() === filterIdStr);
       if (idx >= 0) {
         store[idx] = { ...store[idx], ...update.$set };
         return { modifiedCount: 1 };
@@ -22,7 +24,8 @@ const mockDb = {
       return { modifiedCount: 0 };
     },
     deleteOne: async (filter: any) => {
-      const idx = store.findIndex((d) => d._id === String(filter._id));
+      const filterIdStr = filter._id instanceof ObjectId ? filter._id.toString() : String(filter._id);
+      const idx = store.findIndex((d) => d._id.toString() === filterIdStr);
       if (idx >= 0) {
         store.splice(idx, 1);
         return { deletedCount: 1 };
