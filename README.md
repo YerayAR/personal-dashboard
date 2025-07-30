@@ -77,7 +77,9 @@ src/
 - `npm run build`: Compila la aplicación para producción.
 - `npm run preview`: Previsualiza la build de producción.
 - `npm run deploy:cloudflare`: Despliega la aplicación en Cloudflare Pages.
+- `npm test`: Ejecuta la suite de pruebas con Vitest.
 
 ## CI/CD con GitHub Actions
 
 El repositorio está configurado con un workflow de GitHub Actions (`.github/workflows/deploy.yml`) para la integración y despliegue continuo en Cloudflare Pages. El workflow se dispara en cada `push` a la rama `main`.
+Las pruebas unitarias y de integración se ejecutan automáticamente y deben aprobarse antes de realizar el despliegue.
