@@ -17,24 +17,42 @@ services:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     networks:
       - dashboard-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   # SvelteKit Application
   app:
-    build: .
+    build: 
+      context: .
+      target: production
     container_name: personal-dashboard-app
     restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
-      MONGODB_URI: mongodb://admin:password123@mongodb:27017/personal_dashboard?authSource=admin
-      DB_NAME: personal_dashboard
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://admin:password123@mongodb:27017/personal_dashboard?authSource=admin
+      - DB_NAME=personal_dashboard
+      - PORT=3000
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - dashboard-network
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   mongodb_data:
+    driver: local
 
 networks:
   dashboard-network:
