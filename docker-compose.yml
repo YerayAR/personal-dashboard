@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: personal-dashboard-db
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: personal_dashboard
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - dashboard-network
+
+  # SvelteKit Application
+  app:
+    build: .
+    container_name: personal-dashboard-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      MONGODB_URI: mongodb://admin:password123@mongodb:27017/personal_dashboard?authSource=admin
+      DB_NAME: personal_dashboard
+    depends_on:
+      - mongodb
+    networks:
+      - dashboard-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  dashboard-network:
+    driver: bridge

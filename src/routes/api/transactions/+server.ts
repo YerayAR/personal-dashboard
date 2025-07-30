@@ -1,22 +1,25 @@
-import type { RequestHandler } from '@sveltejs/kit';
-import type { Transaction } from '$lib/types';
 import { getDb } from '$lib/server/db';
+import { json } from '@sveltejs/kit';
 
-/**
- * Handles creation of a transaction.
- */
-export const POST: RequestHandler = async ({ request }) => {
-  const body: Transaction = await request.json();
-  const db = await getDb();
-  const res = await db.collection('transactions').insertOne(body);
-  return new Response(JSON.stringify(res), { status: 201 });
-};
+export async function GET() {
+  try {
+    const db = await getDb();
+    const transactions = await db.collection('transactions').find({}).sort({ date: -1 }).toArray();
+    return json({ transactions }, { status: 200 });
+  } catch (error) {
+    return json({ error: 'Error al obtener transacciones' }, { status: 500 });
+  }
+}
 
-/**
- * Returns all transactions.
- */
-export const GET: RequestHandler = async () => {
-  const db = await getDb();
-  const items = await db.collection('transactions').find().toArray();
-  return new Response(JSON.stringify(items));
-};
+export async function POST({ request }) {
+  try {
+    const db = await getDb();
+    const transaction = await request.json();
+
+    const result = await db.collection('transactions').insertOne(transaction);
+
+    return json({ id: result.insertedId }, { status: 201 });
+  } catch (error) {
+    return json({ error: 'Error al guardar la transacción' }, { status: 500 });
+  }
+}
