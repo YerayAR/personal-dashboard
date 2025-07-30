@@ -7,7 +7,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "deploy:cloudflare": "npm run build && npx wrangler pages deploy",
-    "test": "vitest"
+    "test": "vitest --config config/vitest.config.ts"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.0.0",
