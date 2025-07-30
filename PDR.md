@@ -9,7 +9,7 @@
 - **Frontend**: SvelteKit, TypeScript, Tailwind CSS
 - **Backend**: Node.js, MongoDB
 - **Testing**: Vitest, Testing Library
-- **Deployment**: Docker, GitHub Actions, Cloudflare Pages
+- **Deployment**: Docker, GitHub Actions
 
 ### 1.2. Key Features
 
@@ -109,20 +109,38 @@ The codebase is structured to separate concerns and promote modularity.
 
 ## 5. CI/CD & Deployment
 
-### 5.1. Workflow
+### 5.1. Continuous Integration
 
-The project uses a GitHub Actions workflow defined in `.github/workflows/deploy.yml` for Continuous Integration and Continuous Deployment.
+The project uses a GitHub Actions workflow defined in `.github/workflows/ci.yml` for Continuous Integration.
 
 1.  **Trigger**: The workflow runs on every `push` or `pull_request` to the `main` branch.
-2.  **CI**: The `test` job installs dependencies, runs linters, performs type-checking, and executes the full test suite.
-3.  **CD**: If the `test` job succeeds, the `deploy` job builds the application and deploys it to Cloudflare Pages.
+2.  **CI Pipeline**: The `test` job installs dependencies, runs linters, performs type-checking, and executes the full test suite.
 
-### 5.2. Cloudflare Pages Configuration
+### 5.2. Container Deployment
 
-- **Project Name**: `personal-dashboard`
-- **Build Command**: `npm run build`
-- **Build Output Directory**: `build`
-- **Environment Variables**: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `MONGODB_URI`, `DB_NAME` must be configured in the Cloudflare Pages project settings.
+The application is designed to run in Docker containers for easy deployment and scalability.
+
+**Architecture**:
+- **Application Container**: Node.js application built with SvelteKit adapter-node
+- **Database Container**: MongoDB 7.0 with pre-seeded sample data
+- **Multi-stage Build**: Optimized Docker build with separate build and production stages
+- **Health Checks**: Both containers include health monitoring
+
+**Deployment Scripts**:
+- `deploy.sh`: Bash script for Linux/macOS deployment
+- `deploy.ps1`: PowerShell script for Windows deployment
+
+**Quick Deployment**:
+```bash
+# Linux/macOS
+./deploy.sh
+
+# Windows
+.\deploy.ps1
+
+# Manual
+docker-compose up -d
+```
 
 ## 6. How to Replicate by Another AI
 
