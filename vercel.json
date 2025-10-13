@@ -1,16 +1,5 @@
 {
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
   "framework": "svelte",
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "functions": {
-    "build/server/**/*.js": {
-      "maxDuration": 30
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
