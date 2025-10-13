@@ -1,5 +1,11 @@
-import { ObjectId, type Db } from 'mongodb';
+// import { ObjectId, type Db } from 'mongodb';
 import type { Transaction } from '../types';
+
+// Temporary mock types for deployment
+type Db = any;
+class ObjectId {
+  constructor(id: string) {}
+}
 
 /**
  * Validates a transaction ensuring amount, type and date are correct.

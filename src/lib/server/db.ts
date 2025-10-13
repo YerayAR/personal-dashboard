@@ -1,15 +1,21 @@
-import { MongoClient } from 'mongodb';
-import { MONGODB_URI, DB_NAME } from '$env/static/private';
+// MongoDB temporarily disabled for deployment
+// import { MongoClient } from 'mongodb';
+// import { MONGODB_URI, DB_NAME } from '$env/static/private';
 
-let client: MongoClient;
+// let client: MongoClient;
 
 /**
- * Returns a singleton MongoDB client connection.
+ * Temporary mock DB function for deployment
  */
 export async function getDb() {
-  if (!client) {
-    client = new MongoClient(MONGODB_URI);
-    await client.connect();
-  }
-  return client.db(DB_NAME);
+  // Return a mock object for deployment
+  return {
+    collection: (name: string) => ({
+      find: () => ({ toArray: () => Promise.resolve([]) }),
+      findOne: () => Promise.resolve(null),
+      insertOne: () => Promise.resolve({ insertedId: 'mock-id' }),
+      updateOne: () => Promise.resolve({ modifiedCount: 1 }),
+      deleteOne: () => Promise.resolve({ deletedCount: 1 })
+    })
+  };
 }

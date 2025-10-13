@@ -2,8 +2,8 @@
   import Card from '$lib/components/shared/Card.svelte';
   import Button from '$lib/components/shared/Button.svelte';
   import Papa from 'papaparse';
-  import jsPDF from 'jspdf';
-  import 'jspdf-autotable';
+  // import jsPDF from 'jspdf';
+  // import 'jspdf-autotable';
 
   export let data;
   let { transactions } = data;
@@ -25,17 +25,18 @@
   };
 
   const exportToPDF = () => {
-    const doc = new jsPDF();
-    doc.autoTable({
-      head: [['Fecha', 'Descripción', 'Categoría', 'Monto']],
-      body: transactions.map(t => [
-        new Date(t.date).toLocaleDateString(),
-        t.description,
-        t.category,
-        t.amount.toFixed(2)
-      ])
-    });
-    doc.save('transacciones.pdf');
+    alert('PDF export temporarily disabled. Please use CSV export instead.');
+    // const doc = new jsPDF();
+    // doc.autoTable({
+    //   head: [['Fecha', 'Descripción', 'Categoría', 'Monto']],
+    //   body: transactions.map(t => [
+    //     new Date(t.date).toLocaleDateString(),
+    //     t.description,
+    //     t.category,
+    //     t.amount.toFixed(2)
+    //   ])
+    // });
+    // doc.save('transacciones.pdf');
   };
 </script>
 
