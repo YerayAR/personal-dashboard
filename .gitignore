@@ -83,3 +83,4 @@ financial-data/
 exports/
 reports/
 backups/
+.vercel
