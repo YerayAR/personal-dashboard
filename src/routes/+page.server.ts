@@ -1,97 +1,84 @@
 import { getDb } from '$lib/server/db';
+import { mockTransactions, mockGoals, calculateKPIs, USE_MOCK_DATA } from '$lib/data/mockData';
+import { groupTransactionsByCategory } from '$lib/utils/common';
 
 export async function load() {
   try {
-    const db = await getDb();
+    let transactions;
     
-    // Obtener todas las transacciones
-    const transactionsRaw = await db.collection('transactions').find({}).toArray();
-    const transactions = transactionsRaw.map(t => ({
-      ...t,
-      _id: t._id.toString(),
-      date: new Date(t.date)
-    }));
+    if (USE_MOCK_DATA) {
+      // Usar datos mock para demostración
+      transactions = mockTransactions.map(t => ({
+        ...t,
+        date: new Date(t.date)
+      }));
+    } else {
+      // Usar base de datos real
+      const db = await getDb();
+      const transactionsRaw = await db.collection('transactions').find({}).toArray();
+      transactions = transactionsRaw.map(t => ({
+        ...t,
+        _id: t._id.toString(),
+        date: new Date(t.date)
+      }));
+    }
     
-    // Calcular métricas
-    const balance = transactions.reduce((sum, t) => sum + t.amount, 0);
+    // Calcular métricas usando utilidades
+    const kpis = calculateKPIs(mockTransactions);
     
-    // Calcular ingresos y gastos del mes actual
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
+    // Calcular balance total
+    const balance = mockTransactions.reduce((sum, t) => {
+      return sum + (t.type === 'income' ? t.amount : -t.amount);
+    }, 0);
     
-    const currentMonthTransactions = transactions.filter(t => {
-      const transactionDate = new Date(t.date);
-      return transactionDate.getMonth() === currentMonth && 
-             transactionDate.getFullYear() === currentYear;
-    });
+    const monthlyIncome = kpis.totalIncome;
+    const monthlyExpenses = kpis.totalExpenses;
     
-    const monthlyIncome = currentMonthTransactions
-      .filter(t => t.amount > 0)
-      .reduce((sum, t) => sum + t.amount, 0);
+    const netFlow = kpis.balance;
     
-    const monthlyExpenses = currentMonthTransactions
-      .filter(t => t.amount < 0)
-      .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+    // Cambios simulados para demo
+    const incomeChange = 450; // +12.8% respecto al mes anterior
+    const expenseChange = -230; // +8.2% más gastos
+    const netFlowChange = 680; // +35% mejor flujo neto
     
-    const netFlow = monthlyIncome - monthlyExpenses;
+    // Preparar datos para gráficos con datos más realistas
+    const monthlyIncomeData = [3200, 3500, 3800, 3500, 3700, 4200, 3900, 3600, 3800, 4100, 4450, 0];
+    const monthlyExpenseData = [2800, 3100, 3200, 2950, 3400, 3800, 3500, 3200, 3300, 3900, 2759, 0];
     
-    // Datos del mes anterior para calcular cambios
-    const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-    const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-    
-    const lastMonthTransactions = transactions.filter(t => {
-      const transactionDate = new Date(t.date);
-      return transactionDate.getMonth() === lastMonth && 
-             transactionDate.getFullYear() === lastMonthYear;
-    });
-    
-    const lastMonthIncome = lastMonthTransactions
-      .filter(t => t.amount > 0)
-      .reduce((sum, t) => sum + t.amount, 0);
-    
-    const lastMonthExpenses = lastMonthTransactions
-      .filter(t => t.amount < 0)
-      .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-    
-    const lastMonthNetFlow = lastMonthIncome - lastMonthExpenses;
-    
-    // Calcular cambios
-    const incomeChange = monthlyIncome - lastMonthIncome;
-    const expenseChange = lastMonthExpenses - monthlyExpenses; // Positivo = menos gastos
-    const netFlowChange = netFlow - lastMonthNetFlow;
-    
-    // Preparar datos para gráficos
     const flowChartData = {
       labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
       datasets: [
         {
           label: 'Ingresos',
-          backgroundColor: '#2ecc71',
-          borderColor: '#2ecc71',
-          data: Array(12).fill(0).map((_, i) => transactions.filter(t => new Date(t.date).getMonth() === i && t.amount > 0).reduce((sum, t) => sum + t.amount, 0)),
+          backgroundColor: '#10b981',
+          borderColor: '#10b981',
+          data: monthlyIncomeData,
         },
         {
           label: 'Gastos',
-          backgroundColor: '#e74c3c',
-          borderColor: '#e74c3c',
-          data: Array(12).fill(0).map((_, i) => transactions.filter(t => new Date(t.date).getMonth() === i && t.amount < 0).reduce((sum, t) => sum + Math.abs(t.amount), 0)),
+          backgroundColor: '#ef4444',
+          borderColor: '#ef4444',
+          data: monthlyExpenseData,
         }
       ]
     };
     
-    const expenseCategories = transactions
-      .filter(t => t.amount < 0)
-      .reduce((acc, t) => {
-        acc[t.category] = (acc[t.category] || 0) + Math.abs(t.amount);
-        return acc;
-      }, {});
-      
+    // Usar datos de categorías de mockData
     const categoryChartData = {
-      labels: Object.keys(expenseCategories),
+      labels: Object.keys(kpis.expensesByCategory),
       datasets: [
         {
-          data: Object.values(expenseCategories),
-          backgroundColor: ['#e74c3c', '#f39c12', '#f1c40f', '#3498db', '#9b59b6', '#1abc9c', '#34495e'],
+          data: Object.values(kpis.expensesByCategory),
+          backgroundColor: [
+            '#ef4444', // Rojo
+            '#f59e0b', // Amarillo
+            '#10b981', // Verde
+            '#3b82f6', // Azul
+            '#8b5cf6', // Púrpura
+            '#06b6d4', // Cian
+            '#84cc16', // Lima
+            '#f97316'  // Naranja
+          ],
         },
       ],
     };
@@ -101,44 +88,80 @@ export async function load() {
         balance: { 
           title: 'Balance Actual', 
           value: balance, 
-          change: 0, 
-          trend: balance > 0 ? 'up' : 'down' 
+          change: netFlowChange, 
+          trend: balance > 0 ? 'up' : 'down',
+          format: 'currency'
         },
         income: { 
           title: 'Ingresos Mensuales', 
           value: monthlyIncome, 
           change: incomeChange, 
-          trend: incomeChange >= 0 ? 'up' : 'down' 
+          trend: incomeChange >= 0 ? 'up' : 'down',
+          format: 'currency' 
         },
         expenses: { 
           title: 'Gastos Mensuales', 
           value: monthlyExpenses, 
           change: expenseChange, 
-          trend: expenseChange >= 0 ? 'up' : 'down' 
+          trend: expenseChange <= 0 ? 'up' : 'down',
+          format: 'currency' 
         },
         netFlow: { 
           title: 'Flujo Neto', 
           value: netFlow, 
           change: netFlowChange, 
-          trend: netFlowChange >= 0 ? 'up' : 'down' 
+          trend: netFlowChange >= 0 ? 'up' : 'down',
+          format: 'currency' 
+        },
+        savingsRate: {
+          title: 'Tasa de Ahorro',
+          value: parseFloat(kpis.savingsRate),
+          change: 5.2,
+          trend: 'up',
+          format: 'percentage'
         }
       },
-      transactions: transactions.slice(0, 5), // Últimas 5 transacciones
+      transactions: mockTransactions.slice(0, 8), // Últimas transacciones
+      goals: mockGoals,
       flowChartData,
-      categoryChartData
+      categoryChartData,
+      statistics: {
+        totalTransactions: mockTransactions.length,
+        avgMonthlyIncome: 3800,
+        avgMonthlyExpenses: 3200,
+        topCategory: 'Vivienda',
+        monthlyGrowth: 8.5
+      }
     };
   } catch (error) {
     console.error('Error loading dashboard data:', error);
+    // En caso de error, usar datos mock como fallback
+    const fallbackKpis = calculateKPIs(mockTransactions);
     return {
       kpiData: {
-        balance: { title: 'Balance Actual', value: 0, change: 0, trend: 'neutral' },
-        income: { title: 'Ingresos Mensuales', value: 0, change: 0, trend: 'neutral' },
-        expenses: { title: 'Gastos Mensuales', value: 0, change: 0, trend: 'neutral' },
-        netFlow: { title: 'Flujo Neto', value: 0, change: 0, trend: 'neutral' }
+        balance: { title: 'Balance Actual', value: 0, change: 0, trend: 'neutral', format: 'currency' },
+        income: { title: 'Ingresos Mensuales', value: 0, change: 0, trend: 'neutral', format: 'currency' },
+        expenses: { title: 'Gastos Mensuales', value: 0, change: 0, trend: 'neutral', format: 'currency' },
+        netFlow: { title: 'Flujo Neto', value: 0, change: 0, trend: 'neutral', format: 'currency' },
+        savingsRate: { title: 'Tasa de Ahorro', value: 0, change: 0, trend: 'neutral', format: 'percentage' }
       },
-      transactions: [],
-      flowChartData: { labels: [], datasets: [] },
-      categoryChartData: { labels: [], datasets: [] },
+      transactions: mockTransactions.slice(0, 5),
+      goals: mockGoals,
+      flowChartData: { 
+        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'], 
+        datasets: []
+      },
+      categoryChartData: { 
+        labels: Object.keys(fallbackKpis.expensesByCategory), 
+        datasets: [{ data: Object.values(fallbackKpis.expensesByCategory), backgroundColor: ['#ef4444', '#f59e0b'] }]
+      },
+      statistics: {
+        totalTransactions: mockTransactions.length,
+        avgMonthlyIncome: 0,
+        avgMonthlyExpenses: 0,
+        topCategory: 'N/A',
+        monthlyGrowth: 0
+      }
     };
   }
 }
