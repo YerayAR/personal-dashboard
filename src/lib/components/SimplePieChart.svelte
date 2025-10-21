@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatCurrency } from '../utils/common';
+  import { formatCurrency } from '$lib/utils/common';
   
   export let data: any = { labels: [], datasets: [] };
   export let title = '';
