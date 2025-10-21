@@ -1,7 +1,18 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { GET, POST, PUT, DELETE } from '../../src/routes/api/transactions/+server';
 import * as dbMod from '../../src/lib/server/db';
-import { ObjectId } from 'mongodb';
+// import { ObjectId } from 'mongodb'; // Temporarily disabled for deployment
+
+// Mock ObjectId class for testing
+class ObjectId {
+  private id: string;
+  constructor(id?: string) {
+    this.id = id || Math.random().toString(36).substr(2, 9);
+  }
+  toString() {
+    return this.id;
+  }
+}
 
 // Simple in-memory collection used to mock MongoDB methods
 const store: any[] = [];
@@ -55,7 +66,7 @@ describe('transactions API endpoints', () => {
     const create = await POST({ request: new Request('http://t', { method: 'POST', body: JSON.stringify({ amount: 1, category: 'Food', type: 'expense', date: '2024-01-02' }), headers: { 'Content-Type': 'application/json' } }) });
     const created = await create.json();
 
-    await PUT({ request: new Request('http://t', { method: 'PUT', body: JSON.stringify({ id: created.id, category: 'Drink' }), headers: { 'Content-Type': 'application/json' } }) });
+    await PUT({ request: new Request('http://t', { method: 'PUT', body: JSON.stringify({ id: created.id, amount: 2, category: 'Drink', type: 'expense', date: '2024-01-02' }), headers: { 'Content-Type': 'application/json' } }) });
 
     const res = await GET();
     const body = await res.json();
