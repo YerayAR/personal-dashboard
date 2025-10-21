@@ -1,13 +1,22 @@
-import adapter from '@sveltejs/adapter-vercel';
+import adapter from '@sveltejs/adapter-static';
 import preprocess from 'svelte-preprocess';
 
 export default {
   preprocess: preprocess(),
   kit: {
-    adapter: adapter(),
+    adapter: adapter({
+      pages: 'build',
+      assets: 'build',
+      fallback: 'index.html',
+      precompress: false,
+      strict: false
+    }),
+    prerender: {
+      handleHttpError: 'warn'
+    },
     // Security configuration
     csrf: {
-      checkOrigin: process.env.NODE_ENV === 'production'
+      trustedOrigins: process.env.NODE_ENV === 'production' ? ['auto'] : ['auto', 'http://localhost:*']
     }
   },
 };

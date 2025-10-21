@@ -1,27 +1,8 @@
 <script>
-  import { Line } from 'svelte-chartjs';
-  import {
-    Chart as ChartJS,
-    Title,
-    Tooltip,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    CategoryScale
-  } from 'chart.js';
-
-  ChartJS.register(
-    Title,
-    Tooltip,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    CategoryScale
-  );
-
+  import SimpleBarChart from '../SimpleBarChart.svelte';
+  
   export let data;
+  export let title = 'Flujo Mensual';
 </script>
 
-<Line {data} options={{ responsive: true, maintainAspectRatio: false }} />
+<SimpleBarChart {data} {title} />

@@ -1,27 +1,13 @@
-import { getDb } from '$lib/server/db';
 import { mockTransactions, mockGoals, calculateKPIs, USE_MOCK_DATA } from '$lib/data/mockData';
 import { groupTransactionsByCategory } from '$lib/utils/common';
 
 export async function load() {
   try {
-    let transactions;
-    
-    if (USE_MOCK_DATA) {
-      // Usar datos mock para demostración
-      transactions = mockTransactions.map(t => ({
-        ...t,
-        date: new Date(t.date)
-      }));
-    } else {
-      // Usar base de datos real
-      const db = await getDb();
-      const transactionsRaw = await db.collection('transactions').find({}).toArray();
-      transactions = transactionsRaw.map(t => ({
-        ...t,
-        _id: t._id.toString(),
-        date: new Date(t.date)
-      }));
-    }
+    // Usar datos mock para el sitio estático
+    const transactions = mockTransactions.map(t => ({
+      ...t,
+      date: new Date(t.date)
+    }));
     
     // Calcular métricas usando utilidades
     const kpis = calculateKPIs(mockTransactions);

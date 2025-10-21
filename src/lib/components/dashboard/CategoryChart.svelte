@@ -1,16 +1,8 @@
 <script>
-  import { Pie } from 'svelte-chartjs';
-  import {
-    Chart as ChartJS,
-    Title,
-    Tooltip,
-    Legend,
-    ArcElement
-  } from 'chart.js';
-
-  ChartJS.register(Title, Tooltip, Legend, ArcElement);
-
+  import SimplePieChart from '../SimplePieChart.svelte';
+  
   export let data;
+  export let title = 'Gastos por Categoría';
 </script>
 
-<Pie {data} options={{ responsive: true, maintainAspectRatio: false }} />
+<SimplePieChart {data} {title} />

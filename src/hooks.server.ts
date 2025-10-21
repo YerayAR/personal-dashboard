@@ -5,13 +5,15 @@ import { RateLimiter } from '$lib/utils/security';
 const rateLimiter = new RateLimiter(50, 60000); // 50 requests per minute
 
 export const handle: Handle = async ({ event, resolve }) => {
-  // Get client IP for rate limiting
-  const clientIP = event.getClientAddress();
-  
-  // Apply rate limiting to API routes
-  if (event.url.pathname.startsWith('/api/')) {
-    if (!rateLimiter.isAllowed(clientIP)) {
-      return new Response('Too Many Requests', { status: 429 });
+  // Skip rate limiting during prerendering
+  if (event.url.pathname.startsWith('/api/') && event.getClientAddress) {
+    try {
+      const clientIP = event.getClientAddress();
+      if (!rateLimiter.isAllowed(clientIP)) {
+        return new Response('Too Many Requests', { status: 429 });
+      }
+    } catch (e) {
+      // Ignore during prerendering
     }
   }
 
