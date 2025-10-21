@@ -3,25 +3,15 @@
   import Card from '$lib/components/shared/Card.svelte';
   import FlowChart from '$lib/components/dashboard/FlowChart.svelte';
   import CategoryChart from '$lib/components/dashboard/CategoryChart.svelte';
+  import GoalsSection from '$lib/components/GoalsSection.svelte';
+  import { formatCurrency, formatDate } from '$lib/utils/common';
 
   export let data;
   
-  const { kpiData, transactions, flowChartData, categoryChartData } = data;
+  // Debug: Log data to see what we're getting
+  console.log('Page data:', data);
   
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('es-ES', {
-      style: 'currency',
-      currency: 'EUR'
-    }).format(amount);
-  };
-  
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
+  const { kpiData, transactions, flowChartData, categoryChartData, goals, statistics } = data;
 </script>
 
 <div class="dashboard">
@@ -35,6 +25,9 @@
     <KPICard {...kpiData.income} />
     <KPICard {...kpiData.expenses} />
     <KPICard {...kpiData.netFlow} />
+    {#if kpiData.savingsRate}
+      <KPICard {...kpiData.savingsRate} />
+    {/if}
   </div>
 
   <div class="charts-grid">
@@ -56,7 +49,12 @@
     </Card>
   </div>
   
-  {#if transactions.length > 0}
+  <!-- Goals Section -->
+  {#if goals && goals.length > 0}
+    <GoalsSection {goals} />
+  {/if}
+  
+  {#if transactions && transactions.length > 0}
     <section class="recent-transactions">
       <Card>
         <div class="section-header">
@@ -72,8 +70,8 @@
                 <span class="transaction-description">{transaction.description || 'Sin descripción'}</span>
               </div>
               <div class="transaction-details">
-                <span class="transaction-amount" class:positive={transaction.amount > 0} class:negative={transaction.amount < 0}>
-                  {formatCurrency(Math.abs(transaction.amount))}
+                <span class="transaction-amount" class:positive={transaction.type === 'income'} class:negative={transaction.type === 'expense'}>
+                  {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
                 </span>
                 <span class="transaction-date">{formatDate(transaction.date)}</span>
               </div>
