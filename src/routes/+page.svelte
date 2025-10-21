@@ -95,7 +95,7 @@
   }
 
   .dashboard-header h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin: 0;
   }
@@ -103,6 +103,7 @@
   .dashboard-header p {
     color: #6b7280;
     margin-top: 0.25rem;
+    font-size: 1.1rem;
   }
 
   .kpi-grid {
@@ -134,7 +135,7 @@
   
   .section-header h2 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 600;
     color: #1f2937;
   }
@@ -143,7 +144,7 @@
     color: #3498db;
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   
   .view-all-link:hover {
@@ -177,10 +178,11 @@
   .transaction-category {
     font-weight: 500;
     color: #1f2937;
+    font-size: 1rem;
   }
   
   .transaction-description {
-    font-size: 0.875rem;
+    font-size: 0.95rem;
     color: #6b7280;
   }
   
@@ -237,11 +239,14 @@
   
   .chart-container {
     position: relative;
-    height: 300px;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
   
   .chart-container.pie-chart {
-    height: 250px;
+    height: 280px;
   }
   
   @media (max-width: 768px) {

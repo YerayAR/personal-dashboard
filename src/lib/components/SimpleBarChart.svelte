@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { formatCurrency } from '$lib/utils/common';
+  // Local utility to avoid import issues
+  function formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR'
+    }).format(amount);
+  }
   
   export let data: any = { labels: [], datasets: [] };
   export let title = '';
@@ -18,22 +24,22 @@
   
   {#if data && data.labels && data.labels.length > 0}
     <div class="chart-container" style="height: {chartHeight}px;">
-      <div class="flex items-end justify-between h-full space-x-1">
+      <div class="chart-bars">
         {#each data.labels as label, index}
-          <div class="flex-1 flex flex-col items-center">
-            <div class="flex flex-col items-center justify-end h-full w-full space-y-1">
+          <div class="bar-group">
+            <div class="bars-container">
               {#each data.datasets as dataset, datasetIndex}
                 {@const value = dataset.data[index] || 0}
                 {@const height = maxValue > 0 ? (value / maxValue) * (chartHeight - 40) : 0}
                 {@const color = dataset.backgroundColor || '#3b82f6'}
                 
                 <div 
-                  class="w-full rounded-t transition-all duration-700 ease-out flex items-end justify-center text-xs text-white font-medium"
-                  style="height: {height}px; background-color: {color}; min-height: {value > 0 ? '20px' : '0px'};"
+                  class="bar rounded-t transition-all duration-700 ease-out"
+                  style="height: {height}px; background-color: {color}; width: {100 / data.datasets.length - 2}%; margin: 0 1%;"
                   title="{dataset.label}: {formatCurrency(value)}"
                 >
                   {#if height > 30}
-                    <span class="mb-1">{value > 1000 ? Math.round(value/1000) + 'k' : value}</span>
+                    <span class="bar-label">{value > 1000 ? Math.round(value/1000) + 'k' : value}</span>
                   {/if}
                 </div>
               {/each}
@@ -75,7 +81,52 @@
 
 <style>
   .chart-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     min-height: 200px;
+    width: 100%;
+  }
+  
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 100%;
+    width: 100%;
+    gap: 0.5rem;
+  }
+  
+  .bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  
+  .bars-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 100%;
+    gap: 0.25rem;
+    width: 100%;
+  }
+  
+  .bar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 2px;
+  }
+  
+  .bar-label {
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
   }
   
   .transition-all {

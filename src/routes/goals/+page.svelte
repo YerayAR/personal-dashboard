@@ -36,7 +36,9 @@
       <Card>
         <div class="goal-card">
           <div class="goal-header">
-            <Target />
+            <div class="goal-icon">
+              <Target />
+            </div>
             <h3>{goal.name}</h3>
           </div>
           <div class="goal-body">
@@ -99,6 +101,20 @@
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 1rem;
+  }
+  
+  .goal-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .goal-icon :global(svg) {
+    width: 100%;
+    height: 100%;
   }
 
   .goal-header h3 {

@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { formatCurrency } from '$lib/utils/common';
+  // Local utility to avoid import issues
+  function formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR'
+    }).format(amount);
+  }
   
   export let data: any = { labels: [], datasets: [] };
   export let title = '';
@@ -77,59 +83,171 @@
   {/if}
   
   {#if slices.length > 0}
-    <div class="flex items-center justify-center">
-      <div class="flex items-center space-x-8">
-        <!-- Pie Chart -->
-        <div class="relative">
-          <svg width="200" height="200" viewBox="-100 -100 200 200" class="transform rotate-0">
-            {#each paths as slice}
-              <path
-                d={slice.path}
-                fill={slice.color}
-                stroke="white"
-                stroke-width="2"
-                class="hover:opacity-80 transition-opacity cursor-pointer"
-                title="{slice.label}: {formatCurrency(slice.value)} ({slice.percentage}%)"
-              />
-            {/each}
-            
-            <!-- Center text showing total -->
-            <text x="0" y="-5" text-anchor="middle" class="text-sm font-semibold fill-gray-700">
-              Total
-            </text>
-            <text x="0" y="10" text-anchor="middle" class="text-xs fill-gray-600">
-              {formatCurrency(total)}
-            </text>
-          </svg>
-        </div>
-        
-        <!-- Legend -->
-        <div class="space-y-2">
-          {#each slices as slice, index}
-            <div class="flex items-center space-x-3">
-              <div 
-                class="w-4 h-4 rounded-full" 
-                style="background-color: {slice.color}"
-              ></div>
-              <div class="text-sm">
-                <div class="font-medium text-gray-900">{slice.label}</div>
-                <div class="text-gray-600">
-                  {formatCurrency(slice.value)} ({slice.percentage}%)
-                </div>
+    <div class="pie-chart-wrapper">
+      <!-- Pie Chart -->
+      <div class="pie-chart-container">
+        <svg width="160" height="160" viewBox="-100 -100 200 200" class="pie-svg">
+          {#each paths as slice}
+            <path
+              d={slice.path}
+              fill={slice.color}
+              stroke="white"
+              stroke-width="2"
+              class="pie-slice"
+              title="{slice.label}: {formatCurrency(slice.value)} ({slice.percentage}%)"
+            />
+          {/each}
+          
+          <!-- Center text showing total -->
+          <text x="0" y="-5" text-anchor="middle" class="pie-text-title">
+            Total
+          </text>
+          <text x="0" y="10" text-anchor="middle" class="pie-text-value">
+            {formatCurrency(total)}
+          </text>
+        </svg>
+      </div>
+      
+      <!-- Legend -->
+      <div class="pie-legend">
+        {#each slices as slice, index}
+          <div class="legend-item">
+            <div 
+              class="legend-color" 
+              style="background-color: {slice.color}"
+            ></div>
+            <div class="legend-text">
+              <div class="legend-label">{slice.label}</div>
+              <div class="legend-value">
+                {formatCurrency(slice.value)} ({slice.percentage}%)
               </div>
             </div>
-          {/each}
-        </div>
+          </div>
+        {/each}
       </div>
     </div>
   {:else}
     <div class="flex items-center justify-center h-48 text-gray-500">
       <div class="text-center">
-        <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-        </svg>
+        <div class="text-5xl mb-4">📊</div>
         <p>No hay datos para mostrar</p>
       </div>
     </div>
   {/if}
 </div>
+
+<style>
+  .pie-chart-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+  }
+  
+  .pie-chart-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  .pie-svg {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .pie-slice {
+    transition: opacity 0.2s ease;
+  }
+  
+  .pie-slice:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+  
+  .pie-text-title {
+    font-size: 12px;
+    font-weight: 600;
+    fill: #4b5563;
+  }
+  
+  .pie-text-value {
+    font-size: 10px;
+    fill: #9ca3af;
+  }
+  
+  .pie-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 240px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+  
+  .legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  
+  .legend-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+  
+  .legend-label {
+    font-weight: 500;
+    color: #1f2937;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .legend-value {
+    color: #6b7280;
+    font-size: 0.75rem;
+  }
+  
+  :global(.dark) .pie-text-title {
+    fill: #e5e7eb;
+  }
+  
+  :global(.dark) .pie-text-value {
+    fill: #d1d5db;
+  }
+  
+  :global(.dark) .legend-label {
+    color: #f9fafb;
+  }
+  
+  :global(.dark) .legend-value {
+    color: #9ca3af;
+  }
+  
+  @media (max-width: 640px) {
+    .pie-chart-wrapper {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .pie-legend {
+      width: 100%;
+      max-height: none;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+  }
+</style>
