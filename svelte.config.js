@@ -1,15 +1,11 @@
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-vercel';
 import preprocess from 'svelte-preprocess';
 
 export default {
   preprocess: preprocess(),
   kit: {
     adapter: adapter({
-      pages: 'build',
-      assets: 'build',
-      fallback: 'index.html',
-      precompress: false,
-      strict: false
+      runtime: 'nodejs22.x'
     }),
     prerender: {
       handleHttpError: 'warn'
