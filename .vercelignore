@@ -10,7 +10,6 @@ coverage/
 .env.example
 .eslintrc*
 .prettierrc*
-tsconfig.json
 
 # Documentation
 README.md
@@ -22,8 +21,9 @@ PDR.md
 .git/
 .github/
 
-# Config folders (keep only necessary configs)
-config/
+# Test config only (keep build configs)
+config/vitest.config.ts
+config/README.md
 
 # Node modules (already ignored by default)
 node_modules/
