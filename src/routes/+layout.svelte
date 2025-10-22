@@ -5,7 +5,7 @@
   import Menu from '$lib/icons/Menu.svelte';
   import { browser } from '$app/environment';
 
-  export let data;
+  export const data = {};
   
   let isModalOpen = false;
   let isSidebarOpen = false;

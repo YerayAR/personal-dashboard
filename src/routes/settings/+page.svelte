@@ -45,13 +45,43 @@
   };
 
   const exportData = () => {
-    // Simulación de exportación
-    alert('Función de exportación de datos próximamente');
+    try {
+      // Obtener datos desde localStorage (en una app real, sería desde la API)
+      const data = {
+        settings: {
+          darkMode,
+          currency,
+          notifications,
+          autoBackup
+        },
+        exportDate: new Date().toISOString()
+      };
+      
+      // Crear blob y descargar
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `findash-settings-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      alert('¡Datos exportados exitosamente!');
+    } catch (error) {
+      alert('Error al exportar los datos');
+      console.error(error);
+    }
   };
 
   const clearData = () => {
     if (confirm('¿Estás seguro de que quieres eliminar todos los datos? Esta acción no se puede deshacer.')) {
-      alert('Función de limpieza de datos próximamente');
+      if (browser) {
+        localStorage.clear();
+        alert('Todos los datos han sido eliminados. La página se recargará.');
+        window.location.reload();
+      }
     }
   };
 </script>

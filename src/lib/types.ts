@@ -7,5 +7,6 @@ export type Transaction = {
   category: string;
   type: 'expense' | 'income';
   date: string; // ISO format
+  description?: string;
   tags?: string[];
 };

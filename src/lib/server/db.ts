@@ -1,14 +1,9 @@
-// MongoDB temporarily disabled for deployment
-// import { MongoClient } from 'mongodb';
-// import { MONGODB_URI, DB_NAME } from '$env/static/private';
-
-// let client: MongoClient;
-
 /**
- * Temporary mock DB function for deployment
+ * Mock DB function
+ * Esta aplicación usa mockData en lugar de una base de datos real.
+ * Este archivo se mantiene para compatibilidad con API endpoints que no se usan.
  */
 export async function getDb() {
-  // Return a mock object for deployment
   return {
     collection: (name: string) => ({
       find: () => ({ toArray: () => Promise.resolve([]) }),

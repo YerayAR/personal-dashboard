@@ -38,7 +38,6 @@ src/
 
 - Node.js (v18 o superior)
 - npm
-- Docker (para la base de datos local)
 
 ### Pasos de Instalación
 
@@ -48,38 +47,30 @@ src/
     cd personal-dashboard
     ```
 
-2.  **Crea un archivo `.env`** a partir del ejemplo `.env.example` y configura las variables de entorno para tu base de datos MongoDB.
-    ```
-    MONGODB_URI=mongodb://admin:password123@localhost:27017/personal_dashboard?authSource=admin
-    DB_NAME=personal_dashboard
-    ```
-
-3.  **Instala las dependencias**:
+2.  **Instala las dependencias**:
     ```bash
     npm install
     ```
 
-4.  **Inicia la base de datos con Docker**:
-    El archivo `docker-compose.yml` levantará un contenedor de MongoDB con los datos de ejemplo del script `init-mongo.js`.
-    ```bash
-    docker-compose up -d
-    ```
-
-5.  **Ejecuta la aplicación en modo de desarrollo**:
+3.  **Ejecuta la aplicación en modo de desarrollo**:
     ```bash
     npm run dev
     ```
     La aplicación estará disponible en `http://localhost:3000`.
+
+> **Nota**: Esta aplicación usa datos mock (`src/lib/data/mockData.ts`) y no requiere base de datos.
 
 ## Scripts Disponibles
 
 - `npm run dev`: Inicia el servidor de desarrollo.
 - `npm run build`: Compila la aplicación para producción.
 - `npm run preview`: Previsualiza la build de producción.
-- `npm run deploy:cloudflare`: Despliega la aplicación en Cloudflare Pages.
 - `npm test`: Ejecuta la suite de pruebas con Vitest.
 
-## CI/CD con GitHub Actions
+## Despliegue
 
-El repositorio está configurado con un workflow de GitHub Actions (`.github/workflows/deploy.yml`) para la integración y despliegue continuo en Cloudflare Pages. El workflow se dispara en cada `push` a la rama `main`.
-Las pruebas unitarias y de integración se ejecutan automáticamente y deben aprobarse antes de realizar el despliegue.
+**Plataforma**: Vercel
+
+La aplicación está optimizada para desplegarse en Vercel usando `@sveltejs/adapter-vercel`. El despliegue es automático desde el repositorio de Git.
+
+**CI/CD**: GitHub Actions ejecuta pruebas y verificaciones de seguridad antes del despliegue.
