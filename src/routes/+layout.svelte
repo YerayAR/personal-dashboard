@@ -60,21 +60,23 @@
 </div>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
   :global(*, *::before, *::after) {
     box-sizing: border-box;
   }
 
   :global(body) {
     margin: 0;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f8fafc;
-    color: #1a202c;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    color: #0f172a;
     line-height: 1.6;
   }
 
   :global(.dark) {
-    background-color: #1a202c;
-    color: #f7fafc;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #f1f5f9;
   }
 
   .app-layout {
@@ -85,13 +87,9 @@
   .main-content {
     flex: 1;
     margin-left: 260px;
-    padding: 2rem;
-    background-color: #f8fafc;
+    padding: 2.5rem;
+    background: transparent;
     min-height: 100vh;
-  }
-
-  :global(.dark) .main-content {
-    background-color: #1a202c;
   }
 
   .mobile-menu-button {

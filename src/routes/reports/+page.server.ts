@@ -1,14 +1,11 @@
-import { getDb } from '$lib/server/db';
+import { mockTransactions } from '$lib/data/mockData';
 
 export async function load() {
   try {
-    const db = await getDb();
-    
-    const transactionsRaw = await db.collection('transactions').find({}).toArray();
-    const transactions = transactionsRaw.map(t => ({
+    // Usar datos mock para sitio estático
+    const transactions = mockTransactions.map(t => ({
       ...t,
-      _id: t._id.toString(),
-      date: new Date(t.date)
+      date: t.date
     }));
 
     return {

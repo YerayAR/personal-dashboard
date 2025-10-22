@@ -9,19 +9,30 @@
   let { transactions } = data;
 
   const exportToCSV = () => {
+    if (!transactions || transactions.length === 0) {
+      alert('No hay transacciones para exportar');
+      return;
+    }
+
     const csv = Papa.unparse(transactions.map(t => ({
-      Fecha: new Date(t.date).toLocaleDateString(),
-      Descripción: t.description,
+      Fecha: new Date(t.date).toLocaleDateString('es-ES'),
+      Tipo: t.type === 'income' ? 'Ingreso' : 'Gasto',
+      Descripción: t.description || 'Sin descripción',
       Categoría: t.category,
-      Monto: t.amount
+      Monto: `${t.amount.toFixed(2)} €`
     })));
+    
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.setAttribute('download', 'transacciones.csv');
+    const fecha = new Date().toISOString().split('T')[0];
+    link.setAttribute('download', `transacciones-${fecha}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+    
+    alert(`✓ ${transactions.length} transacciones exportadas correctamente`);
   };
 
   const exportToPDF = () => {
@@ -51,8 +62,8 @@
       <h3>Exportar Transacciones</h3>
       <p>Descarga todos tus datos de transacciones en formato CSV o PDF.</p>
       <div class="export-buttons">
-        <Button onClick={exportToCSV}>Exportar a CSV</Button>
-        <Button onClick={exportToPDF} variant="secondary">Exportar a PDF</Button>
+        <Button on:click={exportToCSV}>Exportar a CSV</Button>
+        <Button on:click={exportToPDF} variant="secondary">Exportar a PDF</Button>
       </div>
     </div>
   </Card>
