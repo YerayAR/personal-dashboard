@@ -16,33 +16,23 @@
     autoBackup = localStorage.getItem('autoBackup') === 'true';
   }
 
-  const toggleDarkMode = () => {
-    darkMode = !darkMode;
-    if (browser) {
-      localStorage.setItem('darkMode', darkMode.toString());
-      document.body.classList.toggle('dark', darkMode);
-    }
-  };
+  // Reactive statements para guardar cambios automáticamente
+  $: if (browser && darkMode !== undefined) {
+    localStorage.setItem('darkMode', darkMode.toString());
+    document.body.classList.toggle('dark', darkMode);
+  }
 
-  const saveCurrency = () => {
-    if (browser) {
-      localStorage.setItem('currency', currency);
-    }
-  };
+  $: if (browser && currency) {
+    localStorage.setItem('currency', currency);
+  }
 
-  const toggleNotifications = () => {
-    notifications = !notifications;
-    if (browser) {
-      localStorage.setItem('notifications', notifications.toString());
-    }
-  };
+  $: if (browser && notifications !== undefined) {
+    localStorage.setItem('notifications', notifications.toString());
+  }
 
-  const toggleAutoBackup = () => {
-    autoBackup = !autoBackup;
-    if (browser) {
-      localStorage.setItem('autoBackup', autoBackup.toString());
-    }
-  };
+  $: if (browser && autoBackup !== undefined) {
+    localStorage.setItem('autoBackup', autoBackup.toString());
+  }
 
   const exportData = () => {
     try {
@@ -101,7 +91,7 @@
           <p>Activa el tema oscuro para una mejor experiencia nocturna</p>
         </div>
         <label class="toggle">
-          <input id="dark-mode-toggle" type="checkbox" bind:checked={darkMode} on:change={toggleDarkMode} />
+          <input id="dark-mode-toggle" type="checkbox" bind:checked={darkMode} />
           <span class="slider"></span>
         </label>
       </div>
@@ -114,7 +104,7 @@
           <label for="currency">Moneda Principal</label>
           <p>Selecciona la moneda para mostrar los importes</p>
         </div>
-        <select id="currency" bind:value={currency} on:change={saveCurrency}>
+        <select id="currency" bind:value={currency}>
           <option value="EUR">Euro (€)</option>
           <option value="USD">Dólar ($)</option>
           <option value="GBP">Libra (£)</option>
@@ -130,7 +120,7 @@
           <p>Recibe notificaciones sobre tus metas y presupuestos</p>
         </div>
         <label class="toggle">
-          <input id="notifications-toggle" type="checkbox" bind:checked={notifications} on:change={toggleNotifications} />
+          <input id="notifications-toggle" type="checkbox" bind:checked={notifications} />
           <span class="slider"></span>
         </label>
       </div>
@@ -144,7 +134,7 @@
           <p>Guarda automáticamente tus datos en la nube</p>
         </div>
         <label class="toggle">
-          <input id="backup-toggle" type="checkbox" bind:checked={autoBackup} on:change={toggleAutoBackup} />
+          <input id="backup-toggle" type="checkbox" bind:checked={autoBackup} />
           <span class="slider"></span>
         </label>
       </div>
@@ -153,8 +143,8 @@
     <Card>
       <h3>Datos</h3>
       <div class="setting-actions">
-        <Button onClick={exportData}>Exportar Datos</Button>
-        <Button variant="danger" onClick={clearData}>Eliminar Datos</Button>
+        <Button on:click={exportData}>Exportar Datos</Button>
+        <Button variant="danger" on:click={clearData}>Eliminar Datos</Button>
       </div>
     </Card>
   </div>
@@ -211,14 +201,16 @@
   .toggle {
     position: relative;
     display: inline-block;
-    width: 44px;
-    height: 24px;
+    width: 52px;
+    height: 28px;
+    cursor: pointer;
   }
 
   .toggle input {
     opacity: 0;
     width: 0;
     height: 0;
+    position: absolute;
   }
 
   .slider {
@@ -228,36 +220,57 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #cbd5e0;
-    transition: .4s;
-    border-radius: 24px;
+    background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 28px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
+    height: 22px;
+    width: 22px;
     left: 3px;
     bottom: 3px;
-    background-color: white;
-    transition: .4s;
+    background: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   input:checked + .slider {
-    background-color: #3498db;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
   }
 
   input:checked + .slider:before {
-    transform: translateX(20px);
+    transform: translateX(24px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+  }
+
+  .slider:hover {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
   }
 
   select {
-    padding: 0.5rem;
-    border-radius: 6px;
-    border: 1px solid #d1d5db;
+    padding: 0.625rem 1rem;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
     background: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+
+  select:hover {
+    border-color: #3b82f6;
+  }
+
+  select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
 
   .setting-actions {
@@ -267,9 +280,10 @@
   }
 
   h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.125rem;
-    font-weight: 600;
+    margin: 0 0 1.25rem 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
   }
 
   :global(.dark) .setting-info label {
@@ -280,13 +294,26 @@
     color: #d1d5db;
   }
 
+  :global(.dark) .slider {
+    background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  }
+
+  :global(.dark) input:checked + .slider {
+    background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+  }
+
   :global(.dark) select {
-    background: #374151;
-    border-color: #4b5563;
-    color: #f9fafb;
+    background: #1e293b;
+    border-color: #475569;
+    color: #e2e8f0;
+  }
+
+  :global(.dark) select:hover,
+  :global(.dark) select:focus {
+    border-color: #3b82f6;
   }
 
   :global(.dark) h3 {
-    color: #f9fafb;
+    color: #e2e8f0;
   }
 </style>

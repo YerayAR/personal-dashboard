@@ -1,10 +1,9 @@
 <script>
   export let type = 'button';
   export let variant = 'primary'; // primary, secondary, danger
-  export let onClick = () => {};
 </script>
 
-<button type="{type}" class="btn btn-{variant}" on:click={onClick}>
+<button type="{type}" class="btn btn-{variant}" on:click>
   <slot />
 </button>
 
@@ -13,40 +12,58 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem 1rem;
+    padding: 0.625rem 1.25rem;
     font-weight: 600;
-    border-radius: 8px;
-    border: 1px solid transparent;
-    transition: background-color 0.2s, color 0.2s;
+    font-size: 0.9375rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn:active {
+    transform: translateY(0);
   }
 
   .btn-primary {
-    background-color: #3498db;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
-    border-color: #3498db;
   }
 
   .btn-primary:hover {
-    background-color: #2980b9;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   }
 
   .btn-secondary {
-    background-color: #e2e8f0;
-    color: #4a5568;
-    border-color: #e2e8f0;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    color: #475569;
   }
 
   .btn-secondary:hover {
-    background-color: #cbd5e0;
+    background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
   }
 
   .btn-danger {
-    background-color: #e74c3c;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     color: white;
-    border-color: #e74c3c;
   }
 
   .btn-danger:hover {
-    background-color: #c0392b;
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  }
+
+  :global(.dark) .btn-secondary {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    color: #cbd5e1;
+  }
+
+  :global(.dark) .btn-secondary:hover {
+    background: linear-gradient(135deg, #475569 0%, #334155 100%);
   }
 </style>
