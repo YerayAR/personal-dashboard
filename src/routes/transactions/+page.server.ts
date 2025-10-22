@@ -1,15 +1,14 @@
-import { getDb } from '$lib/server/db';
+import { mockTransactions } from '$lib/data/mockData';
 
 export async function load() {
   try {
-    const db = await getDb();
-    
-    const transactionsRaw = await db.collection('transactions').find({}).sort({ date: -1 }).toArray();
-    const transactions = transactionsRaw.map(t => ({
-      ...t,
-      _id: t._id.toString(),
-      date: new Date(t.date)
-    }));
+    // Usar datos mock para el sitio estático
+    const transactions = mockTransactions
+      .map(t => ({
+        ...t,
+        date: t.date // Ya está en formato ISO string
+      }))
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     // Obtener categorías únicas
     const categories = [...new Set(transactions.map(t => t.category))];

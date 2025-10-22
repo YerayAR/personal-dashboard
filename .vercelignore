@@ -1,0 +1,29 @@
+# Tests
+tests/
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+coverage/
+
+# Development files
+.env.example
+.eslintrc*
+.prettierrc*
+tsconfig.json
+
+# Documentation
+README.md
+WARP.md
+SECURITY.md
+PDR.md
+
+# Git
+.git/
+.github/
+
+# Config folders (keep only necessary configs)
+config/
+
+# Node modules (already ignored by default)
+node_modules/

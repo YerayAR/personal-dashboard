@@ -1,14 +1,12 @@
-import { getDb } from '$lib/server/db';
+import { mockGoals } from '$lib/data/mockData';
 
 export async function load() {
   try {
-    const db = await getDb();
-    
-    const goalsRaw = await db.collection('goals').find({}).toArray();
-    const goals = goalsRaw.map(g => ({
+    // Usar datos mock para el sitio estático
+    const goals = mockGoals.map(g => ({
       ...g,
-      _id: g._id.toString(),
-      dueDate: new Date(g.dueDate)
+      _id: g.id,
+      dueDate: g.targetDate // Usar el nombre consistente
     }));
 
     return {

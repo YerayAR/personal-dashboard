@@ -85,3 +85,6 @@ reports/
 backups/
 .vercel
 
+# Warp AI configuration
+WARP.md
+

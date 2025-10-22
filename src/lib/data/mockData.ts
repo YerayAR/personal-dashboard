@@ -12,7 +12,7 @@ export const mockTransactions: Transaction[] = [
     amount: 3500,
     category: 'Salario',
     type: 'income',
-    date: new Date(2024, 10, 1).toISOString().split('T')[0], // Noviembre 2024
+    date: new Date(2025, 9, 1).toISOString().split('T')[0], // Octubre 2025 (mes actual)
     description: 'Salario mensual'
   },
   {
@@ -20,7 +20,7 @@ export const mockTransactions: Transaction[] = [
     amount: 800,
     category: 'Freelance',
     type: 'income',
-    date: new Date(2024, 10, 15).toISOString().split('T')[0],
+    date: new Date(2025, 9, 15).toISOString().split('T')[0],
     description: 'Proyecto web desarrollo'
   },
   {
@@ -28,7 +28,7 @@ export const mockTransactions: Transaction[] = [
     amount: 150,
     category: 'Inversiones',
     type: 'income',
-    date: new Date(2024, 10, 10).toISOString().split('T')[0],
+    date: new Date(2025, 9, 10).toISOString().split('T')[0],
     description: 'Dividendos acciones'
   },
 
@@ -38,7 +38,7 @@ export const mockTransactions: Transaction[] = [
     amount: 1200,
     category: 'Vivienda',
     type: 'expense',
-    date: new Date(2024, 10, 1).toISOString().split('T')[0],
+    date: new Date(2025, 9, 1).toISOString().split('T')[0],
     description: 'Alquiler mensual'
   },
   {
@@ -46,7 +46,7 @@ export const mockTransactions: Transaction[] = [
     amount: 450,
     category: 'Alimentación',
     type: 'expense',
-    date: new Date(2024, 10, 5).toISOString().split('T')[0],
+    date: new Date(2025, 9, 5).toISOString().split('T')[0],
     description: 'Compra supermercado'
   },
   {
@@ -54,7 +54,7 @@ export const mockTransactions: Transaction[] = [
     amount: 89,
     category: 'Transporte',
     type: 'expense',
-    date: new Date(2024, 10, 3).toISOString().split('T')[0],
+    date: new Date(2025, 9, 3).toISOString().split('T')[0],
     description: 'Gasolina'
   },
   {
@@ -62,7 +62,7 @@ export const mockTransactions: Transaction[] = [
     amount: 120,
     category: 'Servicios',
     type: 'expense',
-    date: new Date(2024, 10, 2).toISOString().split('T')[0],
+    date: new Date(2025, 9, 2).toISOString().split('T')[0],
     description: 'Internet y móvil'
   },
   {
@@ -70,7 +70,7 @@ export const mockTransactions: Transaction[] = [
     amount: 75,
     category: 'Entretenimiento',
     type: 'expense',
-    date: new Date(2024, 10, 7).toISOString().split('T')[0],
+    date: new Date(2025, 9, 7).toISOString().split('T')[0],
     description: 'Cine y cena'
   },
   {
@@ -78,7 +78,7 @@ export const mockTransactions: Transaction[] = [
     amount: 200,
     category: 'Alimentación',
     type: 'expense',
-    date: new Date(2024, 10, 12).toISOString().split('T')[0],
+    date: new Date(2025, 9, 12).toISOString().split('T')[0],
     description: 'Compra supermercado'
   },
   {
@@ -86,7 +86,7 @@ export const mockTransactions: Transaction[] = [
     amount: 350,
     category: 'Salud',
     type: 'expense',
-    date: new Date(2024, 10, 8).toISOString().split('T')[0],
+    date: new Date(2025, 9, 8).toISOString().split('T')[0],
     description: 'Seguro médico mensual'
   },
   {
@@ -94,7 +94,7 @@ export const mockTransactions: Transaction[] = [
     amount: 180,
     category: 'Educación',
     type: 'expense',
-    date: new Date(2024, 10, 6).toISOString().split('T')[0],
+    date: new Date(2025, 9, 6).toISOString().split('T')[0],
     description: 'Curso online desarrollo'
   },
   {
@@ -102,7 +102,7 @@ export const mockTransactions: Transaction[] = [
     amount: 95,
     category: 'Ropa',
     type: 'expense',
-    date: new Date(2024, 10, 14).toISOString().split('T')[0],
+    date: new Date(2025, 9, 14).toISOString().split('T')[0],
     description: 'Camisa trabajo'
   },
 
@@ -112,7 +112,7 @@ export const mockTransactions: Transaction[] = [
     amount: 3500,
     category: 'Salario',
     type: 'income',
-    date: new Date(2024, 9, 1).toISOString().split('T')[0], // Octubre 2024
+    date: new Date(2025, 8, 1).toISOString().split('T')[0], // Septiembre 2025
     description: 'Salario mensual'
   },
   {
@@ -120,7 +120,7 @@ export const mockTransactions: Transaction[] = [
     amount: 600,
     category: 'Freelance',
     type: 'income',
-    date: new Date(2024, 9, 20).toISOString().split('T')[0],
+    date: new Date(2025, 8, 20).toISOString().split('T')[0],
     description: 'Mantenimiento web'
   },
   {
@@ -128,7 +128,7 @@ export const mockTransactions: Transaction[] = [
     amount: 1200,
     category: 'Vivienda',
     type: 'expense',
-    date: new Date(2024, 9, 1).toISOString().split('T')[0],
+    date: new Date(2025, 8, 1).toISOString().split('T')[0],
     description: 'Alquiler mensual'
   },
   {
@@ -136,7 +136,7 @@ export const mockTransactions: Transaction[] = [
     amount: 380,
     category: 'Alimentación',
     type: 'expense',
-    date: new Date(2024, 9, 10).toISOString().split('T')[0],
+    date: new Date(2025, 8, 10).toISOString().split('T')[0],
     description: 'Compra supermercado'
   },
   {
@@ -144,7 +144,7 @@ export const mockTransactions: Transaction[] = [
     amount: 150,
     category: 'Entretenimiento',
     type: 'expense',
-    date: new Date(2024, 9, 15).toISOString().split('T')[0],
+    date: new Date(2025, 8, 15).toISOString().split('T')[0],
     description: 'Salida fin de semana'
   },
 
@@ -154,7 +154,7 @@ export const mockTransactions: Transaction[] = [
     amount: 2200,
     category: 'Bonus',
     type: 'income',
-    date: new Date(2024, 8, 30).toISOString().split('T')[0], // Septiembre
+    date: new Date(2025, 7, 30).toISOString().split('T')[0], // Agosto
     description: 'Bonus trimestral'
   },
   {
@@ -162,7 +162,7 @@ export const mockTransactions: Transaction[] = [
     amount: 500,
     category: 'Ahorro',
     type: 'expense',
-    date: new Date(2024, 10, 1).toISOString().split('T')[0],
+    date: new Date(2025, 9, 1).toISOString().split('T')[0],
     description: 'Transferencia a ahorros'
   },
   {
@@ -170,7 +170,7 @@ export const mockTransactions: Transaction[] = [
     amount: 280,
     category: 'Servicios',
     type: 'expense',
-    date: new Date(2024, 10, 16).toISOString().split('T')[0],
+    date: new Date(2025, 9, 16).toISOString().split('T')[0],
     description: 'Electricidad y gas'
   }
 ];
@@ -181,7 +181,7 @@ export const mockGoals = [
     name: 'Fondo de Emergencia',
     targetAmount: 10000,
     currentAmount: 6500,
-    targetDate: '2024-12-31',
+    targetDate: '2025-12-31',
     category: 'Ahorro',
     description: 'Fondo para gastos inesperados'
   },
@@ -190,7 +190,7 @@ export const mockGoals = [
     name: 'Vacaciones Europa',
     targetAmount: 3000,
     currentAmount: 1800,
-    targetDate: '2025-07-01',
+    targetDate: '2026-07-01',
     category: 'Viaje',
     description: 'Viaje de 2 semanas por Europa'
   },
@@ -199,7 +199,7 @@ export const mockGoals = [
     name: 'Laptop Nueva',
     targetAmount: 1500,
     currentAmount: 1200,
-    targetDate: '2024-12-15',
+    targetDate: '2025-12-15',
     category: 'Tecnología',
     description: 'MacBook Pro para desarrollo'
   },
@@ -208,7 +208,7 @@ export const mockGoals = [
     name: 'Curso Especialización',
     targetAmount: 800,
     currentAmount: 250,
-    targetDate: '2025-03-01',
+    targetDate: '2026-03-01',
     category: 'Educación',
     description: 'Certificación en Cloud Computing'
   }

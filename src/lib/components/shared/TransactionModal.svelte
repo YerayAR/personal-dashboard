@@ -75,7 +75,7 @@
 </script>
 
 {#if isOpen}
-<div class="modal-backdrop" on:click={handleBackdropClick} on:keydown={(e) => e.key === 'Escape' && closeModal()} role="dialog" aria-modal="true">
+<div class="modal-backdrop" on:click={handleBackdropClick} on:keydown={(e) => e.key === 'Escape' && closeModal()} role="dialog" aria-modal="true" tabindex="-1">
     <div class="modal-content">
       <Card>
         <div class="modal-header">
